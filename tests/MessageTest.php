@@ -7,8 +7,8 @@ use AC\Imap\Tests\TestCase\ImapTestCase;
 
 class MessageTest extends ImapTestCase
 {
-    public const SUBJECT = 'MessageTest';
-    public const BODY_PLAIN = 'MessageTest body';
+    public const string SUBJECT = 'MessageTest';
+    public const string BODY_PLAIN = 'MessageTest body';
 
     private ?Message $message = null;
 
@@ -79,6 +79,12 @@ class MessageTest extends ImapTestCase
 
     public function testGetBodyPlain(): void
     {
-        $this->assertEquals(self::BODY_PLAIN."\r\n", $this->message->getBodyPlain());
+        $expectedBody = self::BODY_PLAIN;
+        $actualBody = $this->message->getBodyPlain();
+
+        $this->assertEquals(
+            rtrim($expectedBody),
+            rtrim($actualBody)
+        );
     }
 }

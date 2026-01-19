@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-    <coverage>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         bootstrap="./tests/bootstrap.php"
+         colors="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/12.5/phpunit.xsd"
+>
+    <testsuites>
+        <testsuite name="IMAP test suite">
+            <directory>./tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
         <include>
             <directory>./</directory>
         </include>
@@ -9,12 +18,7 @@
             <directory>./vendor</directory>
             <file>./.php-cs-fixer.php</file>
         </exclude>
-    </coverage>
-    <testsuites>
-        <testsuite name="IMAP test suite">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
+    </source>
     <php>
         <env name="IMAP_HOST" value=""/>
         <env name="IMAP_PORT" value="143"/>

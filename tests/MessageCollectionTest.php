@@ -8,8 +8,8 @@ use AC\Imap\Tests\TestCase\ImapTestCase;
 
 class MessageCollectionTest extends ImapTestCase
 {
-    public const SUBJECT = 'MessageCollectionTest';
-    public const BODY_PLAIN = 'MessageCollectionTest body';
+    public const string SUBJECT = 'MessageCollectionTest';
+    public const string BODY_PLAIN = 'MessageCollectionTest body';
 
     private ?MessageCollection $messages = null;
 

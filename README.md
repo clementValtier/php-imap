@@ -1,9 +1,9 @@
 php-imap
 ========
 
-An object oriented PHP IMAP library.
+An object-oriented PHP IMAP library.
 
-PHP >= 8.1 is required for version 2.x. For PHP 7 or earlier, use version 1.x.
+PHP >= 8.4 is required for version 2.x. For PHP 7 or earlier, use version 1.x.
 
 Installation
 ------------
@@ -15,7 +15,7 @@ composer require acucchieri/php-imap
 Usage
 -----
 
-``` php
+```php
 <?php
 
 use AC\Imap\Imap;

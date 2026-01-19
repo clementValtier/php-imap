@@ -11,6 +11,8 @@
 
 namespace AC\Imap;
 
+use IMAP\Connection;
+
 /**
  * Message class.
  *
@@ -18,14 +20,14 @@ namespace AC\Imap;
  */
 class Message
 {
-    public const FLAG_SEEN = '\\Seen';
-    public const FLAG_ANSWERED = '\\Answered';
-    public const FLAG_FLAGGED = '\\Flagged';
-    public const FLAG_DELETED = '\\Deleted';
-    public const FLAG_DRAFT = '\\Draft';
+    public const string FLAG_SEEN = '\\Seen';
+    public const string FLAG_ANSWERED = '\\Answered';
+    public const string FLAG_FLAGGED = '\\Flagged';
+    public const string FLAG_DELETED = '\\Deleted';
+    public const string FLAG_DRAFT = '\\Draft';
 
     private int $uid;
-    private \IMAP\Connection $stream;
+    private Connection $stream;
     private \stdClass $header;
     /** @var array|string[] */
     private array $body = [
@@ -37,7 +39,7 @@ class Message
     private array $attachments = [];
     private bool $isBodyParsed = false;
 
-    public function __construct(\IMAP\Connection $stream, int $uid)
+    public function __construct(Connection $stream, int $uid)
     {
         $this->stream = $stream;
         $this->uid = $uid;
@@ -307,10 +309,10 @@ class Message
     {
         $structure = imap_fetchstructure($this->stream, $this->uid, FT_UID);
         if ($structure) {
-            if (isset($structure->parts) && !empty($structure->parts)) {
+            if (!empty($structure->parts)) {
                 foreach ($structure->parts as $key => $part) {
                     $section = $key + 1;
-                    $this->parsePart($part, (string)$section);
+                    $this->parsePart($part, (string) $section);
                 }
             } else {
                 $this->parsePart($structure);
@@ -320,10 +322,10 @@ class Message
         $this->isBodyParsed = true;
     }
 
-    private function parsePart(\stdClass $part, string $section = null): void
+    private function parsePart(\stdClass $part, ?string $section = null): void
     {
         // nested parts
-        if (isset($part->parts) && !empty($part->parts)) {
+        if (!empty($part->parts)) {
             foreach ($part->parts as $subSection => $subPart) {
                 $notAttachment = (!isset($part->disposition) || 'attachment' !== $part->disposition);
                 if (isset($part->type) && isset($part->subtype)
@@ -393,7 +395,7 @@ class Message
             case TYPETEXT:          // 0 : text plain or html
                 if (isset($parameters['charset']) && 'utf-8' !== strtolower($parameters['charset'])) {
                     if ('iso-8859-1' === strtolower($parameters['charset'])) {
-                        $data = utf8_encode($data);
+                        $data = mb_convert_encoding($data, 'UTF-8', 'ISO-8859-1');
                     } else {
                         $data = iconv($parameters['charset'], "UTF-8//TRANSLIT//IGNORE", $data);
                         if (false === $data) {

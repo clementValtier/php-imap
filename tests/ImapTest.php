@@ -4,6 +4,7 @@ namespace AC\Imap\Tests;
 
 use AC\Imap\Collection\MessageCollection;
 use AC\Imap\Tests\TestCase\ImapTestCase;
+use PHPUnit\Framework\Attributes\Depends;
 
 class ImapTest extends ImapTestCase
 {
@@ -27,9 +28,7 @@ class ImapTest extends ImapTestCase
         $this->assertTrue(self::$imap->append($message));
     }
 
-    /**
-     * @depends testAppend
-     */
+    #[Depends("testAppend")]
     public function testSearch(): MessageCollection
     {
         $messages = self::$imap->search(sprintf('FROM "%s"', self::$from));
@@ -39,9 +38,7 @@ class ImapTest extends ImapTestCase
         return $messages;
     }
 
-    /**
-     * @depends testSearch
-     */
+    #[Depends("testSearch")]
     public function testExpunge(MessageCollection $messages): void
     {
         foreach ($messages as $message) {

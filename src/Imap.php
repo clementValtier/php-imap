@@ -12,6 +12,7 @@
 namespace AC\Imap;
 
 use AC\Imap\Collection\MessageCollection;
+use IMAP\Connection;
 
 /**
  * Imap class.
@@ -34,7 +35,7 @@ class Imap
      * @phpstan-var Config $config
      */
     private array $config;
-    private ?\IMAP\Connection $stream = null;
+    private ?Connection $stream = null;
     private ?string $mailbox = null;
 
     /**
@@ -57,7 +58,7 @@ class Imap
         }
     }
 
-    public function getStream(): ?\IMAP\Connection
+    public function getStream(): ?Connection
     {
         return $this->stream;
     }
@@ -129,7 +130,7 @@ class Imap
      *
      * @return bool returns TRUE on success or FALSE on failure
      */
-    public function append(string $message, string $folder = null, string $options = null): bool
+    public function append(string $message, ?string $folder = null, ?string $options = null): bool
     {
         if (!$this->stream) {
             $this->stream = $this->connect();
@@ -217,11 +218,11 @@ class Imap
         if (!$this->stream) {
             $this->stream = $this->connect();
         }
-        
+
         return imap_expunge($this->stream);
     }
 
-    public function formatMailbox(string $folder = null): string
+    public function formatMailbox(?string $folder = null): string
     {
         return sprintf('{%s:%s}%s',
             $this->config['host'],
@@ -230,7 +231,7 @@ class Imap
         );
     }
 
-    private function connect(): \IMAP\Connection
+    private function connect(): Connection
     {
         $mailbox = sprintf('{%s:%s%s}%s',
             $this->config['host'],
